@@ -1,0 +1,30 @@
+<!-- ko ifnot: settings.plugins.psucontrol -->
+<span class="help-inline label label-important">This plugin requires <a href="https://plugins.octoprint.org/plugins/psucontrol/" target="_blank">PSU Control</a> in order to function. It can be installed from the Plugin Manager.</span>
+<!-- /ko -->
+
+<form class="form-horizontal">
+    <h4>General</h4>
+    <div class="control-group">
+        <label for="gpio-device" class="control-label">GPIO Device</label>
+        <div class="controls">
+            <select id="gpio-device" data-bind="value: settings.plugins.psucontrol_togglegpio.GPIODevice" >
+                {% for item in plugin_psucontrol_togglegpio_availableGPIODevices %}
+                <option value="{{ item }}">{{ item }}</option>
+                {% endfor %}
+            </select>
+            <span class="help-inline">Pin numbers correspond to what is exposed by the GPIO device.</span>
+            <span class="help-inline"><span class="label label-important">Raspberry Pi Users: Use BCM numbering.</span> See: <a href="https://pinout.xyz" target="_new">https://pinout.xyz</a></span>
+        </div>
+    </div>
+    <br />
+    <div class="control-group">
+        <label for="gpio-pin" class="control-label">On/Off GPIO Pin</label>
+        <div class="controls">
+            <input id="gpio-pin" type="number" min="0" class="input-mini" data-bind="value: settings.plugins.psucontrol_togglegpio.switchGPIOPin"> <input type="checkbox" data-bind="checked: settings.plugins.psucontrol_togglegpio.invertSwitchGPIOPin" aria-label="Invert"> Invert
+        </div>
+        <label for="toggle-time" class="control-label">Pin Active Time (ms)</label>
+        <div class="controls">
+            <input id="toggle-time" type="number" min="0" class="input-mini" data-bind="value: settings.plugins.psucontrol_togglegpio.toggleTime">
+        </div>
+    </div>
+</form>
