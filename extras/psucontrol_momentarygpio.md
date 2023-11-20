@@ -1,9 +1,9 @@
 ---
 layout: plugin
 
-id: psucontrol_togglegpio
-title: OctoPrint-PSUControl-ToggleGPIO
-description: Adds a toggle option that sends a signal for a brief time rather than continuous.
+id: psucontrol_momentarygpio
+title: OctoPrint-PSUControl-MomentaryGpio
+description: Adds a momentary option that sends a signal for a brief time rather than continuous.
 authors:
 - Justin Zak
 license: AGPLv3
@@ -11,9 +11,9 @@ license: AGPLv3
 # TODO
 date: today's date in format YYYY-MM-DD, e.g. 2015-04-21
 
-homepage: https://github.com/irotsoma/OctoPrint-PSUControl-ToggleGPIO
-source: https://github.com/irotsoma/OctoPrint-PSUControl-ToggleGPIO
-archive: https://github.com/irotsoma/OctoPrint-PSUControl-ToggleGPIO/archive/master.zip
+homepage: https://github.com/irotsoma/OctoPrint-PSUControl-MomentaryGpio
+source: https://github.com/irotsoma/OctoPrint-PSUControl-MomentaryGpio
+archive: https://github.com/irotsoma/OctoPrint-PSUControl-MomentaryGpio/archive/master.zip
 
 # TODO
 # Set this to true if your plugin uses the dependency_links setup parameter to include
@@ -88,7 +88,7 @@ compatibility:
   # Compatible Python version
   #
   # It is recommended to only support Python 3 for new plugins, in which case this should be ">=3,<4"
-  # 
+  #
   # Plugins that wish to support both Python 2 and 3 should set it to ">=2.7,<4".
   #
   # Plugins that only support Python 2 will not be accepted into the plugin repository.
@@ -98,4 +98,4 @@ compatibility:
 ---
 
 **TODO**: Longer description of your plugin, configuration examples etc. This part will be visible on the page at
-http://plugins.octoprint.org/plugin/psucontrol_togglegpio/
+http://plugins.octoprint.org/plugin/psucontrol_momentarygpio/

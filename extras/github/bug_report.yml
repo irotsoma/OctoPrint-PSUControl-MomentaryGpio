@@ -1,15 +1,15 @@
 name: 🐛 Report a bug
-description: Create a bug report to help improve OctoPrint-PSUControl-ToggleGPIO
+description: Create a bug report to help improve OctoPrint-PSUControl-MomentaryGpio
 body:
   - type: markdown
     attributes:
       value: >-
-        **Thank you for wanting to report a bug in OctoPrint-PSUControl-ToggleGPIO!**
+        **Thank you for wanting to report a bug in OctoPrint-PSUControl-MomentaryGpio!**
 
-          * First, be sure you are running the [latest version of the OctoPrint-PSUControl-ToggleGPIO plugin](https://github.com/irotsoma/OctoPrint-PSUControl-ToggleGPIO/releases).
+          * First, be sure you are running the [latest version of the OctoPrint-PSUControl-MomentaryGpio plugin](https://github.com/irotsoma/OctoPrint-PSUControl-MomentaryGpio/releases).
           * You will also need to [enable debugging on the plugin](https://docs.octoprint.org/en/master/configuration/logging_yaml.html).
             * This may be done through the *Settings* > *OctoPrint* > *Logging* > *Logging Levels* section.
-            * Select the "octoprint.plugins.psucontrol_togglegpio" name, and make sure Level is "DEBUG".
+            * Select the "octoprint.plugins.psucontrol_momentarygpio" name, and make sure Level is "DEBUG".
             * Save, then restart OctoPrint, which allows the developers to see debug information from the moment the plugin is loaded.
           * Finally, when submitting a bug report, you **must** [include a Systeminfo Bundle](https://community.octoprint.org/t/what-is-a-systeminfo-bundle-and-how-can-i-obtain-one/29887), generated after the point the bug occurs. This allows the developers to examine the debug logs produced from your plugin installation.
 
@@ -35,8 +35,8 @@ body:
         ## Environment
   - type: input
     attributes:
-      label: Version of OctoPrint-PSUControl-ToggleGPIO
-      description: Can be found in *Settings* > *Plugin Manager*, next to "OctoPrint-PSUControl-ToggleGPIO".
+      label: Version of OctoPrint-PSUControl-MomentaryGpio
+      description: Can be found in *Settings* > *Plugin Manager*, next to "OctoPrint-PSUControl-MomentaryGpio".
     validations:
       required: true
   - type: input

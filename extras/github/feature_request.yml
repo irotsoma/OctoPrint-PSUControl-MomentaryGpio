@@ -1,11 +1,11 @@
 name: ✨ Request a feature
-description: Request a new feature to implement in OctoPrint-PSUControl-ToggleGPIO
+description: Request a new feature to implement in OctoPrint-PSUControl-MomentaryGpio
 title: "[Request]"
 body:
   - type: markdown
     attributes:
       value: >
-        **Thank you for wanting to request a feature in OctoPrint-PSUControl-ToggleGPIO!**
+        **Thank you for wanting to request a feature in OctoPrint-PSUControl-MomentaryGpio!**
   - type: textarea
     attributes:
       label: Is your feature request related to a problem? Please describe.

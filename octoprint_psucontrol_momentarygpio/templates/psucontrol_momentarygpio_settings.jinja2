@@ -7,8 +7,8 @@
     <div class="control-group">
         <label for="gpio-device" class="control-label">GPIO Device</label>
         <div class="controls">
-            <select id="gpio-device" data-bind="value: settings.plugins.psucontrol_togglegpio.GPIODevice" >
-                {% for item in plugin_psucontrol_togglegpio_availableGPIODevices %}
+            <select id="gpio-device" data-bind="value: settings.plugins.psucontrol_momentarygpio.GPIODevice" >
+                {% for item in plugin_psucontrol_momentarygpio_availableGPIODevices %}
                 <option value="{{ item }}">{{ item }}</option>
                 {% endfor %}
             </select>
@@ -20,11 +20,11 @@
     <div class="control-group">
         <label for="gpio-pin" class="control-label">On/Off GPIO Pin</label>
         <div class="controls">
-            <input id="gpio-pin" type="number" min="0" class="input-mini" data-bind="value: settings.plugins.psucontrol_togglegpio.switchGPIOPin"> <input type="checkbox" data-bind="checked: settings.plugins.psucontrol_togglegpio.invertSwitchGPIOPin" aria-label="Invert"> Invert
+            <input id="gpio-pin" type="number" min="0" class="input-mini" data-bind="value: settings.plugins.psucontrol_momentarygpio.switchGPIOPin"> <input type="checkbox" data-bind="checked: settings.plugins.psucontrol_momentarygpio.invertSwitchGPIOPin" aria-label="Invert"> Invert
         </div>
-        <label for="toggle-time" class="control-label">Pin Active Time (ms)</label>
+        <label for="pulse-time" class="control-label">Pin Pulse Time (ms)</label>
         <div class="controls">
-            <input id="toggle-time" type="number" min="0" class="input-mini" data-bind="value: settings.plugins.psucontrol_togglegpio.toggleTime">
+            <input id="pulse-time" type="number" min="0" class="input-mini" data-bind="value: settings.plugins.psucontrol_momentarygpio.pulseTime">
         </div>
     </div>
 </form>

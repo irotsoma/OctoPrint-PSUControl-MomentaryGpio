@@ -6,7 +6,7 @@ import periphery
 import glob
 import time
 
-class PsuControl_ToggleGpioPlugin(octoprint.plugin.StartupPlugin,
+class PsuControl_MomentaryGpioPlugin(octoprint.plugin.StartupPlugin,
                                   octoprint.plugin.RestartNeedingPlugin,
                                   octoprint.plugin.TemplatePlugin,
                                   octoprint.plugin.SettingsPlugin
@@ -21,7 +21,7 @@ class PsuControl_ToggleGpioPlugin(octoprint.plugin.StartupPlugin,
             gpioDevice='',
             switchGPIOPin=0,
             invertSwitchGPIOPin=False,
-            toggleTime=100
+            pulseTime=100
         )
 
     def on_after_startup(self):
@@ -39,16 +39,16 @@ class PsuControl_ToggleGpioPlugin(octoprint.plugin.StartupPlugin,
 
     def turn_psu_on(self):
         self._logger.debug("Switching PSU On Using GPIO: {}".format(self._settings.get(["switchGPIOPin"])))
-        self.toggle_gpio()
+        self.momentary_gpio()
 
     def turn_psu_off(self):
         self._logger.debug("Switching PSU Off Using GPIO: {}".format(self._settings.get(["switchGPIOPin"])))
-        self.toggle_gpio()
+        self.momentary_gpio()
 
-    def toggle_gpio(self):
+    def momentary_gpio(self):
         try:
             self._switchGPIOPin.write(bool(1 ^ self._settings.get_boolean(["invertSwitchGPIOPin"])))
-            time.sleep(self._settings.get_int(["toggleTime"])/1000)
+            time.sleep(self._settings.get_int(["pulseTime"])/1000)
             self._switchGPIOPin.write(bool(0 ^ self._settings.get_boolean(["invertSwitchGPIOPin"])))
         except Exception:
             self._logger.exception("Exception while writing GPIO line")
@@ -88,9 +88,9 @@ class PsuControl_ToggleGpioPlugin(octoprint.plugin.StartupPlugin,
         # Define your plugin's asset files to automatically include in the
         # core UI here.
         return {
-            "js": ["js/psucontrol_togglegpio.js"],
-            "css": ["css/psucontrol_togglegpio.css"],
-            "less": ["less/psucontrol_togglegpio.less"]
+            "js": ["js/psucontrol_momentarygpio.js"],
+            "css": ["css/psucontrol_momentarygpio.css"],
+            "less": ["less/psucontrol_momentarygpio.less"]
         }
 
     ##~~ Softwareupdate hook
@@ -100,18 +100,18 @@ class PsuControl_ToggleGpioPlugin(octoprint.plugin.StartupPlugin,
         # Plugin here. See https://docs.octoprint.org/en/master/bundledplugins/softwareupdate.html
         # for details.
         return {
-            "psucontrol_togglegpio": {
-                "displayName": "Psucontrol_togglegpio Plugin",
+            "psucontrol_momentarygpio": {
+                "displayName": "Psucontrol_momentarygpio Plugin",
                 "displayVersion": self._plugin_version,
 
                 # version check: github repository
                 "type": "github_release",
                 "user": "irotsoma",
-                "repo": "OctoPrint-PSUControl-ToggleGPIO",
+                "repo": "OctoPrint-PSUControl-MomentaryGpio",
                 "current": self._plugin_version,
 
                 # update method: pip
-                "pip": "https://github.com/irotsoma/OctoPrint-PSUControl-ToggleGPIO/archive/{target_version}.zip",
+                "pip": "https://github.com/irotsoma/OctoPrint-PSUControl-MomentaryGpio/archive/{target_version}.zip",
             }
         }
 
@@ -119,7 +119,7 @@ class PsuControl_ToggleGpioPlugin(octoprint.plugin.StartupPlugin,
 # If you want your plugin to be registered within OctoPrint under a different name than what you defined in setup.py
 # ("OctoPrint-PluginSkeleton"), you may define that here. Same goes for the other metadata derived from setup.py that
 # can be overwritten via __plugin_xyz__ control properties. See the documentation for that.
-__plugin_name__ = "PSUControl_ToggleGPIO Plugin"
+__plugin_name__ = "PSUControl_MomentaryGpio Plugin"
 
 # Set the Python version your plugin is compatible with below. Recommended is Python 3 only for all new plugins.
 # OctoPrint 1.4.0 - 1.7.x run under both Python 3 and the end-of-life Python 2.
@@ -129,7 +129,7 @@ __plugin_pythoncompat__ = ">=3,<4"  # Only Python 3
 
 def __plugin_load__():
     global __plugin_implementation__
-    __plugin_implementation__ = PsuControl_ToggleGpioPlugin()
+    __plugin_implementation__ = PsuControl_MomentaryGpioPlugin()
 
     global __plugin_hooks__
     __plugin_hooks__ = {
