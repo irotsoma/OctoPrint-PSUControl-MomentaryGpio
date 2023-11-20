@@ -1,4 +1,4 @@
 include README.md
-recursive-include octoprint_psucontrol_togglegpio/templates *
-recursive-include octoprint_psucontrol_togglegpio/translations *
-recursive-include octoprint_psucontrol_togglegpio/static *
+recursive-include octoprint_psucontrol_momentarygpio/templates *
+recursive-include octoprint_psucontrol_momentarygpio/translations *
+recursive-include octoprint_psucontrol_momentarygpio/static *
