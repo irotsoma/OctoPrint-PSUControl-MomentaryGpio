@@ -6,17 +6,20 @@ import periphery
 import glob
 import time
 
-class PsuControl_MomentaryGpioPlugin(octoprint.plugin.StartupPlugin,
-                                  octoprint.plugin.RestartNeedingPlugin,
-                                  octoprint.plugin.TemplatePlugin,
-                                  octoprint.plugin.SettingsPlugin
-                                  ):
+
+class PsuControl_MomentaryGpioPlugin(octoprint.plugin.SettingsPlugin,
+                                     octoprint.plugin.StartupPlugin,
+                                     octoprint.plugin.RestartNeedingPlugin,
+                                     octoprint.plugin.TemplatePlugin,
+                                     ):
     def __init__(self):
+        self._logger.debug("Initializing PsuControl_MomentaryGpioPlugin")
         super().__init__()
         self._switchGPIOPin = None
         self._availableGPIODevices = self.get_gpio_devs()
 
     def get_settings_defaults(self):
+        self._logger.debug("Executing: get_settings_defaults")
         return dict(
             gpioDevice='',
             switchGPIOPin=0,
@@ -25,13 +28,16 @@ class PsuControl_MomentaryGpioPlugin(octoprint.plugin.StartupPlugin,
         )
 
     def get_template_vars(self):
+        self._logger.debug("Executing: get_template_vars")
         return {
             "availableGPIODevices": self._availableGPIODevices,
             "switchGPIOPin": self._switchGPIOPin,
             "pulseTime": self._settings.get_int(["pulseTime"]),
             "invertSwitchGPIOPin": self._settings.get_boolean(["invertSwitchGPIOPin"])
         }
+
     def on_after_startup(self):
+        self._logger.debug("Executing: on_after_startup")
         self.configure_gpio()
 
     def cleanup_gpio(self):
@@ -41,21 +47,24 @@ class PsuControl_MomentaryGpioPlugin(octoprint.plugin.StartupPlugin,
         except Exception:
             self._logger.exception("Exception while cleaning up pin {}.".format(self._switchGPIOPin.name))
         self._switchGPIOPin = None
+
     def get_gpio_devs(self):
+        self._logger.debug("Executing: get_gpio_devs")
         return sorted(glob.glob('/dev/gpiochip*'))
 
     def turn_psu_on(self):
-        self._logger.debug("Switching PSU On Using GPIO: {}".format(self._settings.get(["switchGPIOPin"])))
+        self._logger.info("Switching PSU On Using GPIO: {}".format(self._settings.get(["switchGPIOPin"])))
         self.momentary_gpio()
 
     def turn_psu_off(self):
-        self._logger.debug("Switching PSU Off Using GPIO: {}".format(self._settings.get(["switchGPIOPin"])))
+        self._logger.info("Switching PSU Off Using GPIO: {}".format(self._settings.get(["switchGPIOPin"])))
         self.momentary_gpio()
 
     def momentary_gpio(self):
+        self._logger.debug("Executing: momentary_gpio")
         try:
             self._switchGPIOPin.write(bool(1 ^ self._settings.get_boolean(["invertSwitchGPIOPin"])))
-            time.sleep(self._settings.get_int(["pulseTime"])/1000)
+            time.sleep(self._settings.get_int(["pulseTime"]) / 1000)
             self._switchGPIOPin.write(bool(0 ^ self._settings.get_boolean(["invertSwitchGPIOPin"])))
         except Exception:
             self._logger.exception("Exception while writing GPIO line")
@@ -68,7 +77,8 @@ class PsuControl_MomentaryGpioPlugin(octoprint.plugin.StartupPlugin,
         else:
             initial_output = 'high'
         try:
-            pin = periphery.GPIO(self._settings.get(["gpioDevice"]), self._settings.get_int(["switchGPIOPin"]), initial_output)
+            pin = periphery.GPIO(self._settings.get(["gpioDevice"]), self._settings.get_int(["switchGPIOPin"]),
+                                 initial_output)
             self._switchGPIOPin = pin
         except Exception:
             self._logger.exception(
@@ -76,11 +86,13 @@ class PsuControl_MomentaryGpioPlugin(octoprint.plugin.StartupPlugin,
             )
 
     def on_settings_save(self, data):
+        self._logger.debug("Executing: on_settings_save")
         octoprint.plugin.SettingsPlugin.on_settings_save(self, data)
         self.cleanup_gpio()
         self.configure_gpio()
 
     def on_startup(self, host, port):
+        self._logger.debug("Executing: on_startup")
         psucontrol_helpers = self._plugin_manager.get_helpers("psucontrol")
         if not psucontrol_helpers or 'register_plugin' not in psucontrol_helpers.keys():
             self._logger.warning("The version of PSUControl that is installed does not support plugin registration.")
@@ -92,6 +104,7 @@ class PsuControl_MomentaryGpioPlugin(octoprint.plugin.StartupPlugin,
     ##~~ AssetPlugin mixin
 
     def get_assets(self):
+        self._logger.debug("Executing: get_assets")
         # Define your plugin's asset files to automatically include in the
         # core UI here.
         return {
@@ -103,6 +116,7 @@ class PsuControl_MomentaryGpioPlugin(octoprint.plugin.StartupPlugin,
     ##~~ Softwareupdate hook
 
     def get_update_information(self):
+        self._logger.debug("Executing: get_update_information")
         # Define the configuration for your plugin to use with the Software Update
         # Plugin here. See https://docs.octoprint.org/en/master/bundledplugins/softwareupdate.html
         # for details.
