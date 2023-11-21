@@ -48,7 +48,6 @@ class PsuControl_MomentaryGpioPlugin(octoprint.plugin.SettingsPlugin,
         self._switchGPIOPin = None
 
     def get_gpio_devs(self):
-        self._logger.debug("Executing: get_gpio_devs")
         return sorted(glob.glob('/dev/gpiochip*'))
 
     def turn_psu_on(self):
