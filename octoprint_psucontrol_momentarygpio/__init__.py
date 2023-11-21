@@ -70,18 +70,19 @@ class PsuControl_MomentaryGpioPlugin(octoprint.plugin.SettingsPlugin,
 
     def configure_gpio(self):
         self._logger.info("Periphery version: {}".format(periphery.version))
-        if not self._settings.get_boolean(["invertSwitchGPIOPin"]):
-            initial_output = 'low'
-        else:
-            initial_output = 'high'
-        try:
-            pin = periphery.GPIO(self._settings.get(["gpioDevice"]), self._settings.get_int(["switchGPIOPin"]),
-                                 initial_output)
-            self._switchGPIOPin = pin
-        except Exception:
-            self._logger.exception(
-                "Exception while setting up GPIO pin {}".format(self._settings.get_int(["switchGPIOPin"]))
-            )
+        if self._settings.get_int(["switchGPIOPin"]) != 0:
+            if not self._settings.get_boolean(["invertSwitchGPIOPin"]):
+                initial_output = 'low'
+            else:
+                initial_output = 'high'
+            try:
+                pin = periphery.GPIO(self._settings.get(["gpioDevice"]), self._settings.get_int(["switchGPIOPin"]),
+                                     initial_output)
+                self._switchGPIOPin = pin
+            except Exception:
+                self._logger.exception(
+                    "Exception while setting up GPIO pin {}".format(self._settings.get_int(["switchGPIOPin"]))
+                )
 
     def on_settings_save(self, data):
         self._logger.debug("Executing: on_settings_save")
