@@ -32,7 +32,7 @@ plugin_url = "https://github.com/irotsoma/OctoPrint-PSUControl-MomentaryGpio"
 plugin_license = "AGPLv3"
 
 # Any additional requirements besides OctoPrint should be listed here
-plugin_requires = ["periphery"]
+plugin_requires = ["python-periphery"]
 
 ### --------------------------------------------------------------------------------------------------------------------
 ### More advanced options that you usually shouldn't have to touch follow after this point
