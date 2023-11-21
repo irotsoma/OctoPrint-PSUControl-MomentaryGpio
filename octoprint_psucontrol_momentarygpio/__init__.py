@@ -24,6 +24,13 @@ class PsuControl_MomentaryGpioPlugin(octoprint.plugin.StartupPlugin,
             pulseTime=100
         )
 
+    def get_template_vars(self):
+        return {
+            "availableGPIODevices": self._availableGPIODevices,
+            "switchGPIOPin": self._switchGPIOPin,
+            "pulseTime": self._settings.get_int(["pulseTime"]),
+            "invertSwitchGPIOPin": self._settings.get_boolean(["invertSwitchGPIOPin"])
+        }
     def on_after_startup(self):
         self.configure_gpio()
 
