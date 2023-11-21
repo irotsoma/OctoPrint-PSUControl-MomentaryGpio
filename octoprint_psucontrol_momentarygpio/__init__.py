@@ -14,7 +14,6 @@ class PsuControl_MomentaryGpioPlugin(octoprint.plugin.SettingsPlugin,
                                      ):
     def __init__(self):
         super().__init__()
-        self._logger.debug("Initializing PsuControl_MomentaryGpioPlugin")
         self._switchGPIOPin = None
         self._availableGPIODevices = self.get_gpio_devs()
 
