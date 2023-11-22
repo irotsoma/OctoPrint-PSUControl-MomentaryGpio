@@ -40,12 +40,13 @@ class PsuControl_MomentaryGpioPlugin(octoprint.plugin.SettingsPlugin,
         self.configure_gpio()
 
     def cleanup_gpio(self):
-        self._logger.debug("Cleaning up pin {}".format(self._switchDeviceGPIOPin.name))
-        try:
-            self._switchDeviceGPIOPin.close()
-        except Exception:
-            self._logger.exception("Exception while cleaning up pin {}.".format(self._switchDeviceGPIOPin.name))
-        self._switchDeviceGPIOPin = None
+        if self._switchDeviceGPIOPin is not None:
+            self._logger.debug("Cleaning up pin {}".format(self._switchDeviceGPIOPin.name))
+            try:
+                self._switchDeviceGPIOPin.close()
+            except Exception:
+                self._logger.exception("Exception while cleaning up pin {}.".format(self._switchDeviceGPIOPin.name))
+            self._switchDeviceGPIOPin = None
 
     def get_gpio_devs(self):
         return sorted(glob.glob('/dev/gpiochip*'))
@@ -73,8 +74,8 @@ class PsuControl_MomentaryGpioPlugin(octoprint.plugin.SettingsPlugin,
 
     def configure_gpio(self):
         self._logger.info("Periphery version: {}".format(periphery.version))
-        self._logger.debug("Setting up pin: " + self._settings.get_int(["switchGPIOPin"]) + " on " +
-                           self._settings.get(["gpioDevice"]))
+        self._logger.debug("Setting up pin: {} on {}".format(self._settings.get_int(["switchGPIOPin"]),
+                                                             self._settings.get(["gpioDevice"])))
         if self._settings.get_int(["switchGPIOPin"]) != 0:
             if not self._settings.get_boolean(["invertSwitchGPIOPin"]):
                 initial_output = 'low'
