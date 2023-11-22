@@ -14,7 +14,7 @@ class PsuControl_MomentaryGpioPlugin(octoprint.plugin.SettingsPlugin,
                                      ):
     def __init__(self):
         super().__init__()
-        self._switchGPIOPin = None
+        self._switchDeviceGPIOPin = None
         self._availableGPIODevices = self.get_gpio_devs()
 
     def get_settings_defaults(self):
@@ -40,12 +40,12 @@ class PsuControl_MomentaryGpioPlugin(octoprint.plugin.SettingsPlugin,
         self.configure_gpio()
 
     def cleanup_gpio(self):
-        self._logger.debug("Cleaning up pin {}".format(self._switchGPIOPin.name))
+        self._logger.debug("Cleaning up pin {}".format(self._switchDeviceGPIOPin.name))
         try:
-            self._switchGPIOPin.close()
+            self._switchDeviceGPIOPin.close()
         except Exception:
-            self._logger.exception("Exception while cleaning up pin {}.".format(self._switchGPIOPin.name))
-        self._switchGPIOPin = None
+            self._logger.exception("Exception while cleaning up pin {}.".format(self._switchDeviceGPIOPin.name))
+        self._switchDeviceGPIOPin = None
 
     def get_gpio_devs(self):
         return sorted(glob.glob('/dev/gpiochip*'))
@@ -60,13 +60,13 @@ class PsuControl_MomentaryGpioPlugin(octoprint.plugin.SettingsPlugin,
 
     def trigger_gpio(self):
         self._logger.debug("Executing: trigger_gpio")
-        if self._switchGPIOPin is None:
+        if self._switchDeviceGPIOPin is None:
             self._logger.error("GPIO Pin is not Set!")
         else:
             try:
-                self._switchGPIOPin.write(bool(1 ^ self._settings.get_boolean(["invertSwitchGPIOPin"])))
+                self._switchDeviceGPIOPin.write(bool(1 ^ self._settings.get_boolean(["invertSwitchGPIOPin"])))
                 time.sleep(self._settings.get_int(["pulseTime"]) / 1000)
-                self._switchGPIOPin.write(bool(0 ^ self._settings.get_boolean(["invertSwitchGPIOPin"])))
+                self._switchDeviceGPIOPin.write(bool(0 ^ self._settings.get_boolean(["invertSwitchGPIOPin"])))
             except Exception:
                 self._logger.exception("Exception while writing GPIO line")
                 return
@@ -79,17 +79,18 @@ class PsuControl_MomentaryGpioPlugin(octoprint.plugin.SettingsPlugin,
             else:
                 initial_output = 'high'
             try:
-                self._logger.debug("Setting up pin: "+self._settings.get_int(["switchGPIOPin"]))
-                pin = periphery.GPIO(self._settings.get(["gpioDevice"]), self._settings.get_int(["switchGPIOPin"]),
-                                     initial_output)
-                self._switchGPIOPin = pin
+                self._logger.debug("Setting up pin: " + self._settings.get_int(["switchGPIOPin"]) + " on " +
+                                   self._settings.get(["gpioDevice"]))
+                pin = periphery.GPIO(self._settings.get(["gpioDevice"]),
+                                     self._settings.get_int(["switchGPIOPin"]), initial_output)
+                self._switchDeviceGPIOPin = pin
             except Exception:
                 self._logger.exception(
                     "Exception while setting up GPIO pin {}".format(self._settings.get_int(["switchGPIOPin"]))
                 )
 
     def on_settings_save(self, data):
-        self._logger.debug("Executing: on_settings_save: ")
+        self._logger.debug("Executing: on_settings_save")
         octoprint.plugin.SettingsPlugin.on_settings_save(self, data)
         self.cleanup_gpio()
         self.configure_gpio()

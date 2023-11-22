@@ -7,7 +7,7 @@
     <div class="control-group">
         <label for="gpio-device" class="control-label">GPIO Device</label>
         <div class="controls">
-            <select id="gpio-device" data-bind="value: settings.plugins.psucontrol_momentarygpio.GPIODevice" >
+            <select id="gpio-device" data-bind="value: settings.plugins.psucontrol_momentarygpio.gpioDevice" >
                 {% for item in plugin_psucontrol_momentarygpio_availableGPIODevices %}
                 <option value="{{ item }}">{{ item }}</option>
                 {% endfor %}
