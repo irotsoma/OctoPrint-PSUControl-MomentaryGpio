@@ -65,8 +65,9 @@ class PsuControl_MomentaryGpioPlugin(octoprint.plugin.SettingsPlugin,
             self._logger.error("GPIO Pin is not Set!")
         else:
             try:
-                self._switchDeviceGPIOPin.write(bool(1 ^ self._settings.get_boolean(["invertSwitchGPIOPin"])))
                 self._logger.debug("Writing {}".format(bool(1 ^ self._settings.get_boolean(["invertSwitchGPIOPin"]))))
+                self._switchDeviceGPIOPin.write(bool(1 ^ self._settings.get_boolean(["invertSwitchGPIOPin"])))
+                self._logger.debug("Sleeping for {} seconds".format(self._settings.get_int(["pulseTime"]) / 1000))
                 time.sleep(self._settings.get_int(["pulseTime"]) / 1000)
                 self._logger.debug("Writing {}".format(bool(0 ^ self._settings.get_boolean(["invertSwitchGPIOPin"]))))
                 self._switchDeviceGPIOPin.write(bool(0 ^ self._settings.get_boolean(["invertSwitchGPIOPin"])))
