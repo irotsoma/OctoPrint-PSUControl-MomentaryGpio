@@ -1,6 +1,8 @@
 # OctoPrint-PSUControl-MomentaryGpio/
 
-**TODO:** Describe what your plugin does.
+A sub-plugin for the PSUControl plugin that allows using bistable relays for power control. It implements
+the same mechanisms as PSUControl, so it requires python periphery to be installed, only it pulls the GPIO
+up/down only momentarily and then returns it to the default state.
 
 ## Setup
 
@@ -9,9 +11,11 @@ or manually using this URL:
 
     https://github.com/irotsoma/OctoPrint-PSUControl-MomentaryGpio/archive/master.zip
 
-**TODO:** Describe how to install your plugin, if more needs to be done than just installing it via pip or through
-the plugin manager.
-
 ## Configuration
 
-**TODO:** Describe your plugin's configuration options (if any).
+- Set the PSUControl Switching Method to "Plugin" and select "PSUControl MomentaryGpio Plugin" from the dropdown
+
+- Then in the PSUControl MomentaryGpio Plugin settings screen, set the appropriate GPIO Device, PIN, and pulse time in
+milliseconds.
+
+http://plugins.octoprint.org/plugin/psucontrol_momentarygpio/
