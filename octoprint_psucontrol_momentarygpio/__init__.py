@@ -73,14 +73,14 @@ class PsuControl_MomentaryGpioPlugin(octoprint.plugin.SettingsPlugin,
 
     def configure_gpio(self):
         self._logger.info("Periphery version: {}".format(periphery.version))
+        self._logger.debug("Setting up pin: " + self._settings.get_int(["switchGPIOPin"]) + " on " +
+                           self._settings.get(["gpioDevice"]))
         if self._settings.get_int(["switchGPIOPin"]) != 0:
             if not self._settings.get_boolean(["invertSwitchGPIOPin"]):
                 initial_output = 'low'
             else:
                 initial_output = 'high'
             try:
-                self._logger.debug("Setting up pin: " + self._settings.get_int(["switchGPIOPin"]) + " on " +
-                                   self._settings.get(["gpioDevice"]))
                 pin = periphery.GPIO(self._settings.get(["gpioDevice"]),
                                      self._settings.get_int(["switchGPIOPin"]), initial_output)
                 self._switchDeviceGPIOPin = pin
@@ -139,7 +139,10 @@ class PsuControl_MomentaryGpioPlugin(octoprint.plugin.SettingsPlugin,
                 "pip": "https://github.com/irotsoma/OctoPrint-PSUControl-MomentaryGpio/archive/{target_version}.zip",
             }
         }
-
+    def get_template_configs(self):
+        return [
+            dict(type="settings", custom_bindings=False)
+        ]
 
 # If you want your plugin to be registered within OctoPrint under a different name than what you defined in setup.py
 # ("OctoPrint-PluginSkeleton"), you may define that here. Same goes for the other metadata derived from setup.py that
