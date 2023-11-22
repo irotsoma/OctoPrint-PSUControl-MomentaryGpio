@@ -61,14 +61,15 @@ class PsuControl_MomentaryGpioPlugin(octoprint.plugin.SettingsPlugin,
     def trigger_gpio(self):
         self._logger.debug("Executing: trigger_gpio")
         if self._switchGPIOPin is None:
-            self.configure_gpio()
-        try:
-            self._switchGPIOPin.write(bool(1 ^ self._settings.get_boolean(["invertSwitchGPIOPin"])))
-            time.sleep(self._settings.get_int(["pulseTime"]) / 1000)
-            self._switchGPIOPin.write(bool(0 ^ self._settings.get_boolean(["invertSwitchGPIOPin"])))
-        except Exception:
-            self._logger.exception("Exception while writing GPIO line")
-            return
+            self._logger.error("GPIO Pin is not Set!")
+        else:
+            try:
+                self._switchGPIOPin.write(bool(1 ^ self._settings.get_boolean(["invertSwitchGPIOPin"])))
+                time.sleep(self._settings.get_int(["pulseTime"]) / 1000)
+                self._switchGPIOPin.write(bool(0 ^ self._settings.get_boolean(["invertSwitchGPIOPin"])))
+            except Exception:
+                self._logger.exception("Exception while writing GPIO line")
+                return
 
     def configure_gpio(self):
         self._logger.info("Periphery version: {}".format(periphery.version))
@@ -78,6 +79,7 @@ class PsuControl_MomentaryGpioPlugin(octoprint.plugin.SettingsPlugin,
             else:
                 initial_output = 'high'
             try:
+                self._logger.debug("Setting up pin: "+self._settings.get_int(["switchGPIOPin"]))
                 pin = periphery.GPIO(self._settings.get(["gpioDevice"]), self._settings.get_int(["switchGPIOPin"]),
                                      initial_output)
                 self._switchGPIOPin = pin
