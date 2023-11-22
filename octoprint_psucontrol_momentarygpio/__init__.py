@@ -23,14 +23,14 @@ class PsuControl_MomentaryGpioPlugin(octoprint.plugin.SettingsPlugin,
             gpioDevice='',
             switchGPIOPin=0,
             invertSwitchGPIOPin=False,
-            pulseTime=100
+            pulseTime=1000
         )
 
     def get_template_vars(self):
         self._logger.debug("Executing: get_template_vars")
         return {
             "availableGPIODevices": self._availableGPIODevices,
-            "switchGPIOPin": self._switchGPIOPin,
+            "switchGPIOPin": self._settings.get(["switchGPIOPin"]),
             "pulseTime": self._settings.get_int(["pulseTime"]),
             "invertSwitchGPIOPin": self._settings.get_boolean(["invertSwitchGPIOPin"])
         }
@@ -52,14 +52,16 @@ class PsuControl_MomentaryGpioPlugin(octoprint.plugin.SettingsPlugin,
 
     def turn_psu_on(self):
         self._logger.info("Switching PSU On Using GPIO: {}".format(self._settings.get(["switchGPIOPin"])))
-        self.momentary_gpio()
+        self.trigger_gpio()
 
     def turn_psu_off(self):
         self._logger.info("Switching PSU Off Using GPIO: {}".format(self._settings.get(["switchGPIOPin"])))
-        self.momentary_gpio()
+        self.trigger_gpio()
 
-    def momentary_gpio(self):
-        self._logger.debug("Executing: momentary_gpio")
+    def trigger_gpio(self):
+        self._logger.debug("Executing: trigger_gpio")
+        if self._switchGPIOPin is None:
+            self.configure_gpio()
         try:
             self._switchGPIOPin.write(bool(1 ^ self._settings.get_boolean(["invertSwitchGPIOPin"])))
             time.sleep(self._settings.get_int(["pulseTime"]) / 1000)
@@ -85,7 +87,7 @@ class PsuControl_MomentaryGpioPlugin(octoprint.plugin.SettingsPlugin,
                 )
 
     def on_settings_save(self, data):
-        self._logger.debug("Executing: on_settings_save")
+        self._logger.debug("Executing: on_settings_save: ")
         octoprint.plugin.SettingsPlugin.on_settings_save(self, data)
         self.cleanup_gpio()
         self.configure_gpio()
